@@ -1,6 +1,8 @@
+
 from pathlib import Path
 import os
 import dj_database_url
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -132,9 +134,14 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_STORAGE = (
-    'whitenoise.storage.CompressedManifestStaticFilesStorage'
-)
+STORAGES = {
+    'default': {
+        'BACKEND': 'django.core.files.storage.FileSystemStorage',
+    },
+    'staticfiles': {
+        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+    },
+}
 
 
 # =========================
@@ -158,3 +165,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # =========================
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
