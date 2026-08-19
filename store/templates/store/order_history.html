@@ -1,0 +1,168 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Order History - AI E-Commerce</title>
+
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        AI E-Commerce
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/" class="nav-item">
+            <span class="glass-icon">⌂</span>
+            <span>Home</span>
+        </a>
+
+        <a href="{% url 'cart' %}" class="nav-item">
+            <span class="glass-icon">🛒</span>
+            <span>Cart</span>
+        </a>
+
+        <a href="{% url 'order_history' %}" class="nav-item">
+            <span class="glass-icon">📦</span>
+            <span>Orders</span>
+        </a>
+
+        {% if user.is_authenticated %}
+
+            <span class="nav-item">
+                <span class="glass-icon">♙</span>
+                <span>{{ user.username }}</span>
+            </span>
+
+            <a href="{% url 'logout' %}" class="nav-item">
+                <span class="glass-icon">↪</span>
+                <span>Logout</span>
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'login' %}" class="nav-item">
+                <span class="glass-icon">♙</span>
+                <span>Login</span>
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+<main class="container orders-page">
+
+    <div class="title">
+
+        <h1>Order History</h1>
+
+        <p>
+            Track all your previous orders
+        </p>
+
+    </div>
+
+
+    {% for order in orders %}
+
+        <div class="order-card">
+
+            <h3>
+                Order #{{ order.id }}
+            </h3>
+
+            <br>
+
+            <p>
+                <strong>Total:</strong>
+                ${{ order.total_price }}
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+
+                <span class="order-status">
+                    {{ order.status }}
+                </span>
+            </p>
+
+            <br>
+
+            <p>
+                <strong>Name:</strong>
+                {{ order.name }}
+            </p>
+
+            <p>
+                <strong>Address:</strong>
+                {{ order.address }}
+            </p>
+
+            <p>
+                <strong>Phone:</strong>
+                {{ order.phone }}
+            </p>
+
+            <p>
+                <strong>Date:</strong>
+                {{ order.created_at }}
+            </p>
+
+            <br>
+
+            <h4>
+                Products
+            </h4>
+
+            <br>
+
+            {% for item in order.items.all %}
+
+                <p>
+                    {{ item.product.name }}
+                    ×
+                    {{ item.quantity }}
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+    {% empty %}
+
+        <div class="product-card">
+
+            <h3>
+                No orders yet.
+            </h3>
+
+            <br>
+
+            <a href="/" class="details-btn">
+                Start Shopping
+            </a>
+
+        </div>
+
+    {% endfor %}
+
+</main>
+
+</body>
+
+</html>
+

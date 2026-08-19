@@ -1,0 +1,139 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register - AI E-Commerce</title>
+
+    <link rel="stylesheet"
+          href="{% static 'store/style.css' %}">
+
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            AI E-Commerce
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/" class="nav-item">
+                <span class="glass-icon">⌂</span>
+                <span>Home</span>
+            </a>
+
+            <a href="/#products" class="nav-item">
+                <span class="glass-icon">◇</span>
+                <span>Products</span>
+            </a>
+
+            <a href="{% url 'cart' %}" class="nav-item">
+                <span class="glass-icon">🛒</span>
+                <span>Cart</span>
+            </a>
+
+            <a href="{% url 'login' %}" class="nav-item">
+                <span class="glass-icon">♙</span>
+                <span>Login</span>
+            </a>
+
+            <a href="/admin/" class="nav-item">
+                <span class="glass-icon">⚙</span>
+                <span>Admin</span>
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- ================= REGISTER ================= -->
+
+    <main class="container">
+
+        <section class="auth-page">
+
+            <h1>
+                Create Account 🚀
+            </h1>
+
+            <p>
+                Join AI E-Commerce today
+            </p>
+
+
+            {% if error %}
+
+                <div class="error-message">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+
+            <form method="POST" class="auth-form">
+
+                {% csrf_token %}
+
+
+                <label>
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Choose a username"
+                    required
+                >
+
+
+                <label>
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Choose a password"
+                    required
+                >
+
+
+                <button type="submit">
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <p class="auth-link">
+
+                Already have an account?
+
+                <a href="{% url 'login' %}">
+                    Login
+                </a>
+
+            </p>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
+

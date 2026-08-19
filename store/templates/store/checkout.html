@@ -1,0 +1,110 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Checkout - AI E-Commerce</title>
+
+<link rel="stylesheet" href="{% static 'store/style.css' %}">
+```
+
+</head>
+
+<body>
+
+```
+<nav class="navbar">
+
+    <div class="logo">
+        AI E-Commerce
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/" class="nav-item">
+            <span class="glass-icon">⌂</span>
+            <span>Home</span>
+        </a>
+
+        <a href="{% url 'cart' %}" class="nav-item">
+            <span class="glass-icon">🛒</span>
+            <span>Cart</span>
+        </a>
+
+        {% if user.is_authenticated %}
+
+            <span class="nav-item">
+                <span class="glass-icon">♙</span>
+                <span>{{ user.username }}</span>
+            </span>
+
+            <a href="{% url 'logout' %}" class="nav-item">
+                <span class="glass-icon">↪</span>
+                <span>Logout</span>
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'login' %}" class="nav-item">
+                <span class="glass-icon">♙</span>
+                <span>Login</span>
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <div class="checkout-container">
+
+        <h1>Checkout</h1>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <input
+                type="text"
+                name="name"
+                placeholder="Full Name"
+                required
+            >
+
+            <input
+                type="text"
+                name="address"
+                placeholder="Address"
+                required
+            >
+
+            <input
+                type="text"
+                name="phone"
+                placeholder="Phone Number"
+                required
+            >
+
+            <button type="submit">
+                Confirm Order
+            </button>
+
+        </form>
+
+    </div>
+
+</main>
+```
+
+</body>
+</html>
+س

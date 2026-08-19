@@ -1,0 +1,295 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ product.name }} - AI E-Commerce</title>
+<link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+
+<body>
+
+   <nav class="navbar">
+
+
+<div class="logo">
+    AI E-Commerce
+</div>
+
+<div class="nav-links">
+
+    <a href="/" class="nav-item">
+        <span class="glass-icon">⌂</span>
+        <span>Home</span>
+    </a>
+
+    <a href="/#products" class="nav-item">
+        <span class="glass-icon">◇</span>
+        <span>Products</span>
+    </a>
+
+    <a href="{% url 'cart' %}" class="nav-item">
+        <span class="glass-icon">🛒</span>
+        <span>Cart</span>
+    </a>
+
+    {% if user.is_authenticated %}
+
+        <span class="nav-item">
+            <span class="glass-icon">♙</span>
+            <span>Welcome, {{ user.username }}</span>
+        </span>
+
+        <a href="{% url 'logout' %}" class="nav-item">
+            <span class="glass-icon">↪</span>
+            <span>Logout</span>
+        </a>
+
+    {% else %}
+
+        <a href="{% url 'login' %}" class="nav-item">
+            <span class="glass-icon">♙</span>
+            <span>Login</span>
+        </a>
+
+        <a href="{% url 'register' %}" class="nav-item">
+            <span class="glass-icon">+</span>
+            <span>Register</span>
+        </a>
+
+    {% endif %}
+
+    <a href="/admin/" class="nav-item">
+        <span class="glass-icon">⚙</span>
+        <span>Admin</span>
+    </a>
+
+</div>
+
+
+</nav>
+
+
+
+    <main class="container">
+
+        <section class="product-details">
+
+            {% if product.image %}
+
+                <img
+                    src="{{ product.image.url }}"
+                    alt="{{ product.name }}"
+                    class="product-detail-image"
+                >
+
+            {% endif %}
+
+            <div class="product-detail-info">
+
+                <h1>
+                    {{ product.name }}
+                </h1>
+
+                <p class="price">
+                    ${{ product.price }}
+                </p>
+
+                <p class="category">
+                    Category: {{ product.category.name }}
+                </p>
+
+                <p>
+                    {{ product.description }}
+                </p>
+
+                <br>
+
+                <a
+                    href="{% url 'add_to_cart' product.id %}"
+                    class="cart-btn"
+                >
+                    Add to Cart
+                </a>
+
+                <a
+                    href="/"
+                    class="details-btn"
+                >
+                    ← Back to Products
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <section class="reviews">
+
+            <h2>
+                Reviews
+            </h2>
+
+            {% for review in product.reviews.all %}
+
+                <div class="review-card">
+
+                    <strong>
+                        {{ review.user.username }}
+                    </strong>
+
+                    <p>
+                        ⭐ {{ review.rating }}/5
+                    </p>
+
+                    <p>
+                        {{ review.comment }}
+                    </p>
+
+                </div>
+
+            {% empty %}
+
+                <p>
+                    No reviews yet.
+                </p>
+
+            {% endfor %}
+
+
+            {% if user.is_authenticated %}
+
+                <div class="review-form">
+
+                    <h3>
+                        Write a Review
+                    </h3>
+
+                    <form
+                        method="POST"
+                        action="{% url 'add_review' product.id %}"
+                    >
+
+                        {% csrf_token %}
+
+                        <select name="rating" required>
+
+                            <option value="">
+                                Choose Rating
+                            </option>
+
+                            <option value="1">1 ⭐</option>
+                            <option value="2">2 ⭐</option>
+                            <option value="3">3 ⭐</option>
+                            <option value="4">4 ⭐</option>
+                            <option value="5">5 ⭐</option>
+
+                        </select>
+
+                        <br><br>
+
+                        <textarea
+                            name="comment"
+                            placeholder="Write your review..."
+                            required
+                        ></textarea>
+
+                        <br><br>
+
+                        <button type="submit">
+                            Submit Review
+                        </button>
+
+                    </form>
+
+                </div>
+
+            {% else %}
+
+                <p>
+                    Please login to write a review.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+
+        <section class="recommendations">
+
+            <h2>
+                Recommended Products 🤖
+            </h2>
+
+            <div class="products">
+
+                {% for recommended in recommended_products %}
+
+                    <div class="product-card">
+
+                        {% if recommended.image %}
+
+                            <img
+                                src="{{ recommended.image.url }}"
+                                alt="{{ recommended.name }}"
+                            >
+
+                        {% endif %}
+
+                        <div class="product-info">
+
+                            <h3>
+                                {{ recommended.name }}
+                            </h3>
+
+                            <p class="price">
+                                ${{ recommended.price }}
+                            </p>
+
+                            <p class="category">
+                                {{ recommended.category.name }}
+                            </p>
+
+                            <div class="product-actions">
+
+                                <a
+                                    href="{% url 'product_detail' recommended.id %}"
+                                    class="details-btn"
+                                >
+                                    View Details
+                                </a>
+
+                                <a
+                                    href="{% url 'add_to_cart' recommended.id %}"
+                                    class="cart-btn"
+                                >
+                                    Add to Cart
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <p>
+                        No recommendations available.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

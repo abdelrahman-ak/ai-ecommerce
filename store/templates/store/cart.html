@@ -1,0 +1,161 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Shopping Cart</title>
+
+<link rel="stylesheet" href="{% static 'store/style.css' %}">
+
+</head>
+
+<body>
+
+
+<nav class="navbar">
+
+    <div class="logo">
+        AI E-Commerce
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/" class="nav-item">
+            <span class="glass-icon">⌂</span>
+            <span>Home</span>
+        </a>
+
+        <a href="{% url 'cart' %}" class="nav-item">
+            <span class="glass-icon">🛒</span>
+            <span>Cart</span>
+        </a>
+
+        {% if user.is_authenticated %}
+
+            <span class="nav-item">
+                <span class="glass-icon">♙</span>
+                <span>{{ user.username }}</span>
+            </span>
+
+            <a href="{% url 'logout' %}" class="nav-item">
+                <span class="glass-icon">↪</span>
+                <span>Logout</span>
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'login' %}" class="nav-item">
+                <span class="glass-icon">♙</span>
+                <span>Login</span>
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</nav>
+
+
+<main class="container cart-page">
+
+    <h1>Shopping Cart</h1>
+
+
+    {% for item in items %}
+
+        <div class="cart-item">
+
+            <div>
+                <h3>{{ item.product.name }}</h3>
+
+                <p>
+                    Price: ${{ item.product.price }}
+                </p>
+
+                <p>
+                    Total:
+                    ${{ item.total_price|floatformat:2 }}
+                </p>
+            </div>
+
+
+            <div>
+
+                <form method="POST"
+                      action="{% url 'update_cart' item.id %}">
+
+                    {% csrf_token %}
+
+                    <input
+                        type="number"
+                        name="quantity"
+                        value="{{ item.quantity }}"
+                        min="1"
+                    >
+
+                    <button type="submit">
+                        Update
+                    </button>
+
+                </form>
+
+                <br>
+
+                <a
+                    href="{% url 'remove_from_cart' item.id %}"
+                    class="remove-btn"
+                >
+                    Remove
+                </a>
+
+            </div>
+
+        </div>
+
+
+    {% empty %}
+
+        <div class="product-card">
+
+            <h3>Your cart is empty.</h3>
+
+            <br>
+
+            <a href="/" class="details-btn">
+                Continue Shopping
+            </a>
+
+        </div>
+
+    {% endfor %}
+
+
+    {% if items %}
+
+        <div class="cart-total">
+
+            <h2>Your Cart</h2>
+
+            <br>
+
+            <a href="{% url 'checkout' %}"
+               class="cart-btn">
+                Proceed to Checkout →
+            </a>
+
+        </div>
+
+    {% endif %}
+
+
+</main>
+```
+
+</body>
+</html>

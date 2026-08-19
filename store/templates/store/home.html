@@ -1,0 +1,222 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI E-Commerce</title>
+
+    <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+<div class="logo">
+    AI E-Commerce
+</div>
+
+<div class="nav-links">
+
+    <a href="/" class="nav-item">
+        <span class="glass-icon">⌂</span>
+        <span>Home</span>
+    </a>
+
+    <a href="/#products" class="nav-item">
+        <span class="glass-icon">◇</span>
+        <span>Products</span>
+    </a>
+
+    <a href="{% url 'cart' %}" class="nav-item">
+        <span class="glass-icon">🛒</span>
+        <span>Cart</span>
+    </a>
+
+    {% if user.is_authenticated %}
+
+        <span class="nav-item">
+            <span class="glass-icon">♙</span>
+            <span>Welcome, {{ user.username }}</span>
+        </span>
+
+        <a href="{% url 'logout' %}" class="nav-item">
+            <span class="glass-icon">↪</span>
+            <span>Logout</span>
+        </a>
+
+    {% else %}
+
+        <a href="{% url 'login' %}" class="nav-item">
+            <span class="glass-icon">♙</span>
+            <span>Login</span>
+        </a>
+
+        <a href="{% url 'register' %}" class="nav-item">
+            <span class="glass-icon">+</span>
+            <span>Register</span>
+        </a>
+
+    {% endif %}
+
+    <a href="/admin/" class="nav-item">
+        <span class="glass-icon">⚙</span>
+        <span>Admin</span>
+    </a>
+
+</div>
+
+
+</nav>
+
+
+
+    <main class="container">
+
+        <section class="hero">
+
+            <h1>AI-Powered E-Commerce</h1>
+
+            <p>
+                Discover amazing products with smart recommendations.
+            </p>
+
+        </section>
+
+
+        <section class="shop-section">
+
+            <div class="title">
+
+                <h2 id="products">
+                    Our Products
+                </h2>
+
+                <p>
+                    Discover our latest products
+                </p>
+
+            </div>
+
+
+            <div class="search-area">
+
+                <form method="GET" action="">
+
+                    <input
+                        type="text"
+                        name="q"
+                        placeholder="Search products..."
+                        value="{{ query|default:'' }}"
+                    >
+
+                    <button type="submit">
+                        Search
+                    </button>
+
+                </form>
+
+
+                <form method="GET" action="">
+
+                    <select name="category">
+
+                        <option value="">
+                            All Categories
+                        </option>
+
+                        {% for category in categories %}
+
+                            <option value="{{ category.id }}">
+                                {{ category.name }}
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                    <button type="submit">
+                        Filter
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <div class="products">
+
+                {% for product in products %}
+
+                    <div class="product-card">
+
+                        {% if product.image %}
+
+                            <img
+                                src="{{ product.image.url }}"
+                                alt="{{ product.name }}"
+                            >
+
+                        {% endif %}
+
+
+                        <div class="product-info">
+
+                            <h3>
+                                {{ product.name }}
+                            </h3>
+
+                            <p class="price">
+                                ${{ product.price }}
+                            </p>
+
+                            <p class="category">
+                                {{ product.category.name }}
+                            </p>
+
+
+                            <div class="product-actions">
+
+                                <a href="{% url 'product_detail' product.id %}" class="details-btn">
+                                        View Details
+                                </a>
+
+                                <a href="{% url 'add_to_cart' product.id %}" class="cart-btn">
+                                       Add to Cart
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% empty %}
+
+                    <div class="empty-products">
+
+                        <h3>
+                            No products available yet.
+                        </h3>
+
+                        <p>
+                            Add products from the Admin panel.
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>
