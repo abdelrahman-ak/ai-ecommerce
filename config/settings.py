@@ -22,13 +22,18 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '.onrender.com',
-        'finance-maximum-earphone.ngrok-free.dev',
-
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://finance-maximum-earphone.ngrok-free.dev',
-]
+render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+
+if render_host:
+    ALLOWED_HOSTS.append(render_host)
+
+CSRF_TRUSTED_ORIGINS = []
+
+if render_host:
+    CSRF_TRUSTED_ORIGINS.append(f'https://{render_host}')
+
 
 # =========================
 # Applications
@@ -60,7 +65,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'config.urls'
+
 
 # =========================
 # Templates
@@ -89,11 +96,18 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # =========================
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://postgres:123456@localhost:5432/ai_ecommerce'
-    )
-}
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    DATABASES = {
+        'default': dj_database_url.parse(DATABASE_URL)
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.parse(
+            f'sqlite:///{BASE_DIR / "db.sqlite3"}'
+        )
+    }
 
 
 # =========================
