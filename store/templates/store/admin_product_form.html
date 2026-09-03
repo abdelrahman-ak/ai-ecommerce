@@ -1,0 +1,246 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>{{ title }}</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'store/style.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<nav class="navbar">
+
+    <div class="logo">
+        AI E-Commerce
+    </div>
+
+
+    <div class="nav-links">
+
+        <a
+            href="{% url 'admin_dashboard' %}"
+            class="nav-item"
+        >
+            <span class="glass-icon">⚙</span>
+            <span>Dashboard</span>
+        </a>
+
+
+        <a
+            href="{% url 'admin_products' %}"
+            class="nav-item"
+        >
+            <span class="glass-icon">◇</span>
+            <span>Products</span>
+        </a>
+
+
+        <a
+            href="{% url 'home' %}"
+            class="nav-item"
+        >
+            <span class="glass-icon">⌂</span>
+            <span>Store</span>
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<main class="container">
+
+
+    <section class="hero">
+
+        <h1>
+            {{ title }}
+        </h1>
+
+        <p>
+            Manage product information
+        </p>
+
+    </section>
+
+
+
+    <section class="dashboard-section">
+
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            class="admin-product-form"
+        >
+
+            {% csrf_token %}
+
+
+            <label>
+                Product Name
+            </label>
+
+            <input
+                type="text"
+                name="name"
+                value="{{ product.name|default:'' }}"
+                required
+            >
+
+
+
+            <label>
+                Description
+            </label>
+
+            <textarea
+                name="description"
+                rows="5"
+            >{{ product.description|default:'' }}</textarea>
+
+
+
+            <label>
+                Price
+            </label>
+
+            <input
+                type="number"
+                name="price"
+                step="0.01"
+                min="0"
+                value="{{ product.price|default:'' }}"
+                required
+            >
+
+
+
+            <label>
+                Category
+            </label>
+
+            <select
+                name="category"
+                required
+            >
+
+                <option value="">
+                    Select Category
+                </option>
+
+
+                {% for category in categories %}
+
+                    <option
+                        value="{{ category.id }}"
+                        {% if product.category_id == category.id %}
+                            selected
+                        {% endif %}
+                    >
+
+                        {{ category.name }}
+
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+
+
+            <label>
+                Stock
+            </label>
+
+            <input
+                type="number"
+                name="stock"
+                min="0"
+                value="{{ product.stock|default:'0' }}"
+                required
+            >
+
+
+
+            <label>
+                Product Image
+            </label>
+
+            <input
+                type="file"
+                name="image"
+                accept="image/*"
+            >
+
+
+
+            {% if product.image %}
+
+                <div class="current-image">
+
+                    <p>
+                        Current image:
+                    </p>
+
+                    <img
+                        src="{{ product.image.url }}"
+                        class="admin-form-image"
+                        alt="{{ product.name }}"
+                    >
+
+                </div>
+
+            {% endif %}
+
+
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="cart-btn"
+                >
+                    Save Product
+                </button>
+
+
+                <a
+                    href="{% url 'admin_products' %}"
+                    class="details-btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+
+        </form>
+
+
+    </section>
+
+
+</main>
+
+
+</body>
+</html>

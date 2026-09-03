@@ -1,0 +1,313 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{% static 'store/style.css' %}">
+
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+        AI E-Commerce
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{% url 'home' %}"
+           class="nav-item">
+            <span class="glass-icon">⌂</span>
+            <span>Home</span>
+        </a>
+
+        <a href="{% url 'cart' %}"
+           class="nav-item">
+            <span class="glass-icon">🛒</span>
+            <span>Cart</span>
+        </a>
+
+        <a href="{% url 'logout' %}"
+           class="nav-item">
+            <span class="glass-icon">↪</span>
+            <span>Logout</span>
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+    <section class="hero">
+
+        <h1>
+            Admin Dashboard
+        </h1>
+
+        <p>
+            Manage your e-commerce store
+        </p>
+        <div class="dashboard-actions">
+
+    <a
+        href="{% url 'admin_products' %}"
+        class="cart-btn"
+    >
+        Manage Products
+    </a>
+
+</div>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="dashboard-stats">
+
+        <div class="dashboard-card">
+
+            <h3>
+                Products
+            </h3>
+
+            <strong>
+                {{ products_count }}
+            </strong>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <h3>
+                Orders
+            </h3>
+
+            <strong>
+                {{ orders_count }}
+            </strong>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <h3>
+                Customers
+            </h3>
+
+            <strong>
+                {{ customers_count }}
+            </strong>
+
+        </div>
+
+
+        <div class="dashboard-card">
+
+            <h3>
+                Total Sales
+            </h3>
+
+            <strong>
+                ${{ total_sales }}
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- LOW STOCK -->
+
+    <section class="dashboard-section">
+
+        <div class="title">
+
+            <h2>
+                Low Stock Products
+            </h2>
+
+            <p>
+                Products that need your attention
+            </p>
+
+        </div>
+
+
+        {% if low_stock_products %}
+
+            <div class="dashboard-table">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Product
+                            </th>
+
+                            <th>
+                                Stock
+                            </th>
+
+                            <th>
+                                Price
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for product in low_stock_products %}
+
+                            <tr>
+
+                                <td>
+                                    {{ product.name }}
+                                </td>
+
+                                <td>
+                                    {{ product.stock }}
+                                </td>
+
+                                <td>
+                                    ${{ product.price }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <p>
+                All products have sufficient stock.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+
+    <!-- RECENT ORDERS -->
+
+    <section class="dashboard-section">
+
+        <div class="title">
+
+            <h2>
+                Recent Orders
+            </h2>
+
+            <p>
+                Latest customer orders
+            </p>
+
+        </div>
+
+
+        {% if recent_orders %}
+
+            <div class="dashboard-table">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Order
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for order in recent_orders %}
+
+                            <tr>
+
+                                <td>
+                                    #{{ order.id }}
+                                </td>
+
+                                <td>
+                                    {{ order.name|default:"Guest" }}
+                                </td>
+
+                                <td>
+                                    ${{ order.total_price }}
+                                </td>
+
+                                <td>
+                                    {{ order.status }}
+                                </td>
+
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        {% else %}
+
+            <p>
+                No orders yet.
+            </p>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

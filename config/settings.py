@@ -22,8 +22,13 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '.onrender.com',
+        'finance-maximum-earphone.ngrok-free.dev',
+
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://finance-maximum-earphone.ngrok-free.dev',
+]
 
 # =========================
 # Applications
@@ -55,9 +60,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 ROOT_URLCONF = 'config.urls'
-
 
 # =========================
 # Templates

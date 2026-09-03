@@ -16,207 +16,246 @@
 
 <nav class="navbar">
 
-<div class="logo">
-    AI E-Commerce
-</div>
+    <div class="logo">
+        AI E-Commerce
+    </div>
 
-<div class="nav-links">
+    <div class="nav-links">
 
-    <a href="/" class="nav-item">
-        <span class="glass-icon">⌂</span>
-        <span>Home</span>
-    </a>
-
-    <a href="/#products" class="nav-item">
-        <span class="glass-icon">◇</span>
-        <span>Products</span>
-    </a>
-
-    <a href="{% url 'cart' %}" class="nav-item">
-        <span class="glass-icon">🛒</span>
-        <span>Cart</span>
-    </a>
-
-    {% if user.is_authenticated %}
-
-        <span class="nav-item">
-            <span class="glass-icon">♙</span>
-            <span>Welcome, {{ user.username }}</span>
-        </span>
-
-        <a href="{% url 'logout' %}" class="nav-item">
-            <span class="glass-icon">↪</span>
-            <span>Logout</span>
+        <a href="/" class="nav-item">
+            <span class="glass-icon">⌂</span>
+            <span>Home</span>
         </a>
 
-    {% else %}
-
-        <a href="{% url 'login' %}" class="nav-item">
-            <span class="glass-icon">♙</span>
-            <span>Login</span>
+        <a href="/#products" class="nav-item">
+            <span class="glass-icon">◇</span>
+            <span>Products</span>
         </a>
 
-        <a href="{% url 'register' %}" class="nav-item">
-            <span class="glass-icon">+</span>
-            <span>Register</span>
+        <a href="{% url 'cart' %}" class="nav-item">
+            <span class="glass-icon">🛒</span>
+            <span>Cart</span>
         </a>
 
-    {% endif %}
+        {% if user.is_authenticated %}
 
-    <a href="/admin/" class="nav-item">
+            <span class="nav-item">
+                <span class="glass-icon">♙</span>
+                <span>Welcome, {{ user.username }}</span>
+            </span>
+
+            <a href="{% url 'logout' %}" class="nav-item">
+                <span class="glass-icon">↪</span>
+                <span>Logout</span>
+            </a>
+
+        {% else %}
+
+            <a href="{% url 'login' %}" class="nav-item">
+                <span class="glass-icon">♙</span>
+                <span>Login</span>
+            </a>
+
+            <a href="{% url 'register' %}" class="nav-item">
+                <span class="glass-icon">+</span>
+                <span>Register</span>
+            </a>
+
+        {% endif %}
+
+        {% if user.is_authenticated and user.is_staff %}
+    <a href="{% url 'admin_dashboard' %}" class="nav-item">
         <span class="glass-icon">⚙</span>
-        <span>Admin</span>
+        <span>Admin Dashboard</span>
     </a>
+{% endif %}
 
-</div>
-
+    </div>
 
 </nav>
 
 
+<main class="container">
 
-    <main class="container">
+    <section class="hero">
 
-        <section class="hero">
+        <h1>AI-Powered E-Commerce</h1>
 
-            <h1>AI-Powered E-Commerce</h1>
+        <p>
+            Discover amazing products with smart recommendations.
+        </p>
+
+    </section>
+
+
+    <section class="shop-section">
+
+        <div class="title">
+
+            <h2 id="products">
+                Our Products
+            </h2>
 
             <p>
-                Discover amazing products with smart recommendations.
+                Discover our latest products
             </p>
 
-        </section>
+        </div>
 
 
-        <section class="shop-section">
+        <div class="search-area">
 
-            <div class="title">
+            <form method="GET" action="">
 
-                <h2 id="products">
-                    Our Products
-                </h2>
+                <input
+                    type="text"
+                    name="q"
+                    placeholder="Search products..."
+                    value="{{ query|default:'' }}"
+                >
 
-                <p>
-                    Discover our latest products
-                </p>
+                <button type="submit">
+                    Search
+                </button>
 
-            </div>
-
-
-            <div class="search-area">
-
-                <form method="GET" action="">
-
-                    <input
-                        type="text"
-                        name="q"
-                        placeholder="Search products..."
-                        value="{{ query|default:'' }}"
-                    >
-
-                    <button type="submit">
-                        Search
-                    </button>
-
-                </form>
+            </form>
 
 
-                <form method="GET" action="">
+            <form method="GET" action="">
 
-                    <select name="category">
+                <select name="category">
 
-                        <option value="">
-                            All Categories
+                    <option value="">
+                        All Categories
+                    </option>
+
+                    {% for category in categories %}
+
+                        <option value="{{ category.id }}">
+                            {{ category.name }}
                         </option>
 
-                        {% for category in categories %}
+                    {% endfor %}
 
-                            <option value="{{ category.id }}">
-                                {{ category.name }}
-                            </option>
+                </select>
 
-                        {% endfor %}
+                <button type="submit">
+                    Filter
+                </button>
 
-                    </select>
+            </form>
 
-                    <button type="submit">
-                        Filter
-                    </button>
-
-                </form>
-
-            </div>
+        </div>
 
 
-            <div class="products">
+        <div class="products">
 
-                {% for product in products %}
+            {% for product in products %}
 
-                    <div class="product-card">
+                <div class="product-card">
 
-                        {% if product.image %}
+                    {% if product.image %}
 
-                            <img
-                                src="{{ product.image.url }}"
-                                alt="{{ product.name }}"
-                            >
+                        <img
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }}"
+                        >
+
+                    {% endif %}
+
+
+                    <div class="product-info">
+
+                        <h3>
+                            {{ product.name }}
+                        </h3>
+
+                        <p class="price">
+                            ${{ product.price }}
+                        </p>
+
+                        <p class="category">
+                            {{ product.category.name }}
+                        </p>
+
+
+                        <!-- Stock Status -->
+
+                        {% if product.stock == 0 %}
+
+                            <p class="stock-status out-of-stock">
+                                Out of Stock
+                            </p>
+
+                        {% elif product.stock <= 3 %}
+
+                            <p class="stock-status low-stock">
+                                Only {{ product.stock }} left
+                            </p>
+
+                        {% else %}
+
+                            <p class="stock-status in-stock">
+                                In Stock
+                            </p>
 
                         {% endif %}
 
 
-                        <div class="product-info">
+                        <div class="product-actions">
 
-                            <h3>
-                                {{ product.name }}
-                            </h3>
-
-                            <p class="price">
-                                ${{ product.price }}
-                            </p>
-
-                            <p class="category">
-                                {{ product.category.name }}
-                            </p>
+                            <a
+                                href="{% url 'product_detail' product.id %}"
+                                class="details-btn"
+                            >
+                                View Details
+                            </a>
 
 
-                            <div class="product-actions">
+                            {% if product.stock > 0 %}
 
-                                <a href="{% url 'product_detail' product.id %}" class="details-btn">
-                                        View Details
+                                <a
+                                    href="{% url 'add_to_cart' product.id %}"
+                                    class="cart-btn"
+                                >
+                                    Add to Cart
                                 </a>
 
-                                <a href="{% url 'add_to_cart' product.id %}" class="cart-btn">
-                                       Add to Cart
-                                </a>
+                            {% else %}
 
-                            </div>
+                                <span class="cart-btn disabled-btn">
+                                    Out of Stock
+                                </span>
+
+                            {% endif %}
 
                         </div>
 
                     </div>
 
-                {% empty %}
+                </div>
 
-                    <div class="empty-products">
+            {% empty %}
 
-                        <h3>
-                            No products available yet.
-                        </h3>
+                <div class="empty-products">
 
-                        <p>
-                            Add products from the Admin panel.
-                        </p>
+                    <h3>
+                        No products available yet.
+                    </h3>
 
-                    </div>
+                    <p>
+                        Add products from the Admin panel.
+                    </p>
 
-                {% endfor %}
+                </div>
 
-            </div>
+            {% endfor %}
 
-        </section>
+        </div>
 
-    </main>
+    </section>
+
+</main>
 
 </body>
-
 </html>

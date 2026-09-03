@@ -6,7 +6,21 @@ from store import views
 
 
 urlpatterns = [
-    path('', views.home, name='home'),
+
+    # =========================
+    # HOME
+    # =========================
+
+    path(
+        '',
+        views.home,
+        name='home'
+    ),
+
+
+    # =========================
+    # PRODUCTS
+    # =========================
 
     path(
         'product/<int:product_id>/',
@@ -15,12 +29,27 @@ urlpatterns = [
     ),
 
     path(
+        'product/<int:product_id>/review/',
+        views.add_review,
+        name='add_review'
+    ),
+
+
+    # =========================
+    # CART
+    # =========================
+
+    path(
         'cart/add/<int:product_id>/',
         views.add_to_cart,
         name='add_to_cart'
     ),
 
-    path('cart/', views.cart, name='cart'),
+    path(
+        'cart/',
+        views.cart,
+        name='cart'
+    ),
 
     path(
         'cart/remove/<int:item_id>/',
@@ -34,6 +63,11 @@ urlpatterns = [
         name='update_cart'
     ),
 
+
+    # =========================
+    # ORDERS
+    # =========================
+
     path(
         'order/place/',
         views.place_order,
@@ -46,24 +80,92 @@ urlpatterns = [
         name='order_history'
     ),
 
-    path('register/', views.register, name='register'),
-    path('login/', views.user_login, name='login'),
-    path('logout/', views.user_logout, name='logout'),
-
-    path('checkout/', views.checkout, name='checkout'),
-
     path(
-        'product/<int:product_id>/review/',
-        views.add_review,
-        name='add_review'
+        'checkout/',
+        views.checkout,
+        name='checkout'
     ),
 
-    path('admin/', admin.site.urls),
+
+    # =========================
+    # AUTHENTICATION
+    # =========================
+
+    path(
+        'register/',
+        views.register,
+        name='register'
+    ),
+
+    path(
+        'login/',
+        views.user_login,
+        name='login'
+    ),
+
+    path(
+        'logout/',
+        views.user_logout,
+        name='logout'
+    ),
+
+
+    # =========================
+    # ADMIN DASHBOARD
+    # =========================
+
+    path(
+        'dashboard/',
+        views.admin_dashboard,
+        name='admin_dashboard'
+    ),
+
+
+    # =========================
+    # DJANGO ADMIN
+    # =========================
+
+    path(
+        'admin/',
+        admin.site.urls
+    ),
 ]
 
 
+# =========================
+# MEDIA FILES
+# =========================
+
 if settings.DEBUG:
+
     urlpatterns += static(
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
+
+
+urlpatterns += [
+    path(
+        'dashboard/products/',
+        views.admin_products,
+        name='admin_products'
+    ),
+
+    path(
+        'dashboard/products/add/',
+        views.admin_add_product,
+        name='admin_add_product'
+    ),
+
+    path(
+        'dashboard/products/<int:product_id>/edit/',
+        views.admin_edit_product,
+        name='admin_edit_product'
+    ),
+
+    path(
+        'dashboard/products/<int:product_id>/delete/',
+        views.admin_delete_product,
+        name='admin_delete_product'
+    ),
+]

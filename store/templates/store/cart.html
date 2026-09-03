@@ -62,6 +62,7 @@
 </nav>
 
 
+
 <main class="container cart-page">
 
     <h1>Shopping Cart</h1>
@@ -102,7 +103,15 @@
                     <button type="submit">
                         Update
                     </button>
-
+{% if messages %}
+    {% for message in messages %}
+        <div class="cart-message">
+            <span>⚠️</span>
+            <span>{{ message }}</span>
+            <button type="button" class="close-message">&times;</button>
+        </div>
+    {% endfor %}
+{% endif %}
                 </form>
 
                 <br>
@@ -155,7 +164,28 @@
 
 
 </main>
-```
+
+<script>
+    setTimeout(function () {
+        const messages = document.querySelectorAll(".cart-message");
+
+        messages.forEach(function (message) {
+            message.style.opacity = "0";
+            message.style.transform = "translateY(-10px)";
+
+            setTimeout(function () {
+                message.remove();
+            }, 300);
+        });
+    }, 4000);
+
+
+    document.querySelectorAll(".close-message").forEach(function (button) {
+        button.addEventListener("click", function () {
+            this.parentElement.remove();
+        });
+    });
+</script>
 
 </body>
 </html>
